@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\OtherImage;
+use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\Unit;
 use Illuminate\Http\Request;
@@ -12,7 +14,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return view('admin.product.index');
+        return view('admin.product.index', ['products' => Product::all()]);
     }
     public function create()
     {
@@ -31,18 +33,37 @@ class ProductController extends Controller
     }
     public function store(Request $request)
     {
-        return $request;
+        $id = Product::newProduct($request);
+        OtherImage::newOtherImage($id, $request->file('other_image'));
+        return back()->with('message', 'New Product Added Successfully.');
+    }
+    public static function detail($id)
+    {
+        return view('admin.product.detail', ['product' => Product::find($id)]);
     }
     public function edit($id)
     {
-        return view('admin.product.edit');
+        return view('admin.product.edit', [
+            'product'           => Product::find($id),
+            'categories'        => Category::all(),
+            'sub_categories'    => SubCategory::all(),
+            'brands'            => Brand::all(),
+            'units'             => Unit::all(),
+        ]);
     }
     public function update(Request $request, $id)
     {
-        return $request;
+        Product::updateProduct($request, $id);
+        if ($request->file('other_image'))
+        {
+            OtherImage::updateOtherImage($id, $request->file('other_image'));
+        }
+        return redirect('/product/index/')->with('message', 'Product Updated Successfully.');
     }
     public function delete($id)
     {
-        return $id;
+        Product::deleteProduct($id);
+        OtherImage::deleteOtherImage($id);
+        return back()->with('message', 'Product Deleted Successfully.');
     }
 }

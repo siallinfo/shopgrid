@@ -12,7 +12,7 @@ class Category extends Model
     {
         self::$image        = $request->file('image');
         self::$imageName    = self::$image->getClientOriginalName();
-        self::$directory    = 'image/category-image/';
+        self::$directory    = 'image/category/';
         self::$image->move(self::$directory, self::$imageName);
         self::$imageUrl     = self::$directory.self::$imageName;
         return self::$imageUrl;

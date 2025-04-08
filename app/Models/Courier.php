@@ -12,7 +12,7 @@ class Courier extends Model
     {
         self::$image        = $request->file('image');
         self::$imageName    = self::$image->getClientOriginalName();
-        self::$directory    = 'image/courier-image/';
+        self::$directory    = 'image/courier-logo/';
         self::$image->move(self::$directory, self::$imageName);
         self::$imageUrl     = self::$directory.self::$imageName;
         return self::$imageUrl;

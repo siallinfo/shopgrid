@@ -12,7 +12,7 @@ class Brand extends Model
     {
         self::$image        = $request->file('image');
         self::$imageName    = self::$image->getClientOriginalName();
-        self::$directory    = 'image/brand-logo/';
+        self::$directory    = 'image/brand/';
         self::$image->move(self::$directory, self::$imageName);
         self::$imageUrl     = self::$directory.self::$imageName;
         return self::$imageUrl;

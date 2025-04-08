@@ -12,7 +12,7 @@ class Product extends Model
     {
         self::$image        = $request->file('image');
         self::$imageName    = self::$image->getClientOriginalName();
-        self::$directory    = 'image/product-image/';
+        self::$directory    = 'image/product/';
         self::$image->move(self::$directory, self::$imageName);
         self::$imageUrl     = self::$directory.self::$imageName;
         return self::$imageUrl;
@@ -72,6 +72,31 @@ class Product extends Model
     }
     public static function deleteProduct($id)
     {
-
+        self::$product = Product::find($id);
+        if (file_exists(self::$product->image))
+        {
+            unlink(self::$product->image);
+        }
+        self::$product->delete();
+    }
+    public function otherImage()
+    {
+        return $this->hasMany(OtherImage::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
     }
 }
